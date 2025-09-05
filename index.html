@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام متابعة طلاب القرآن الكريم</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #ecfdf5 0%, #f0fdfa 50%, #ecfeff 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #10b981 0%, #0d9488 100%);
+        }
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #059669 0%, #0f766e 100%);
+        }
+        .icon {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+        .icon-sm {
+            width: 20px;
+            height: 20px;
+        }
+        .icon-lg {
+            width: 40px;
+            height: 40px;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen font-sans">
+    <div class="container mx-auto p-6 max-w-7xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-20 h-20 btn-gradient rounded-full mb-4 shadow-lg">
+                <svg class="icon-lg text-white" viewBox="0 0 24 24">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                </svg>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">واجهة متابعة طلاب القرآن الكريم</h1>
+            <p class="text-gray-600 text-lg">نظام شامل لمتابعة تقدم الطلاب في حفظ القرآن الكريم</p>
+        </div>
+
+        <!-- Controls -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+                <div class="relative flex-1 max-w-md">
+                    <svg class="icon-sm absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="بحث في الطلاب والسور..."
+                        class="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
+                    />
+                </div>
+                <button
+                    onclick="showAddForm()"
+                    class="btn-gradient text-white px-6 py-3 rounded-lg transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-1"
+                >
+                    <svg class="icon-sm" viewBox="0 0 24 24">
+                        <path d="M5 12h14"></path>
+                        <path d="M12 5v14"></path>
+                    </svg>
+                    <span class="font-semibold">إضافة طالب جديد</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Add Student Form -->
+        <div id="addForm" class="bg-white rounded-xl shadow-lg p-6 mb-8 border-2 border-emerald-200 hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">إضافة طالب جديد</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">اسم الطالب</label>
+                    <input
+                        type="text"
+                        id="studentName"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500"
+                        placeholder="أدخل اسم الطالب"
+                    />
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">السورة</label>
+                    <select
+                        id="studentSurah"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500"
+                    >
+                        <option value="">اختر السورة</option>
+                        <option value="سورة الفاتحة">سورة الفاتحة</option>
+                        <option value="سورة البقرة">سورة البقرة</option>
+                        <option value="سورة آل عمران">سورة آل عمران</option>
+                        <option value="سورة النساء">سورة النساء</option>
+                        <option value="سورة المائدة">سورة المائدة</option>
+                        <option value="سورة الأنعام">سورة الأنعام</option>
+                        <option value="سورة الأعراف">سورة الأعراف</option>
+                        <option value="سورة الأنفال">سورة الأنفال</option>
+                        <option value="سورة التوبة">سورة التوبة</option>
+                        <option value="سورة يونس">سورة يونس</option>
+                        <option value="سورة هود">سورة هود</option>
+                        <option value="سورة يوسف">سورة يوسف</option>
+                        <option value="سورة الرعد">سورة الرعد</option>
+                        <option value="سورة إبراهيم">سورة إبراهيم</option>
+                        <option value="سورة الحجر">سورة الحجر</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">التاريخ</label>
+                    <input
+                        type="date"
+                        id="studentDate"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500"
+                    />
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">ملاحظة</label>
+                    <textarea
+                        id="studentNotes"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500 h-12 resize-none"
+                        placeholder="أدخل ملاحظاتك هنا..."
+                    ></textarea>
+                </div>
+            </div>
+            <div class="flex justify-center gap-4 mt-6">
+                <button
+                    onclick="addStudent()"
+                    class="bg-emerald-500 text-white px-8 py-3 rounded-lg hover:bg-emerald-600 transition-colors flex items-center gap-2"
+                >
+                    <svg class="icon-sm" viewBox="0 0 24 24">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17,21 17,13 7,13 7,21"></polyline>
+                        <polyline points="7,3 7,8 15,8"></polyline>
+                    </svg>
+                    <span>حفظ</span>
+                </button>
+                <button
+                    onclick="hideAddForm()"
+                    class="bg-gray-500 text-white px-8 py-3 rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2"
+                >
+                    <svg class="icon-sm" viewBox="0 0 24 24">
+                        <path d="m18 6-12 12"></path>
+                        <path d="m6 6 12 12"></path>
+                    </svg>
+                    <span>إلغاء</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Students Grid -->
+        <div id="studentsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Students will be rendered here -->
+        </div>
+
+        <!-- No Results Message -->
+        <div id="noResults" class="text-center py-12 hidden">
+            <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-12 h-12 text-gray-400" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-600 mb-2">لا توجد نتائج</h3>
+            <p class="text-gray-500">لم يتم العثور على أي طلاب مطابقين لبحثك</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-12 py-6 border-t border-gray-200">
+            <p class="text-gray-600">
+                نظام متابعة طلاب القرآن الكريم • بارك الله فيكم وفي طلابكم
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Data storage
+        let students = [
+            {
+                id: 1,
+                name: 'أحمد محمد',
+                surah: 'سورة البقرة',
+                date: '2024-09-05',
+                notes: 'حفظ جيد، يحتاج تحسين في التجويد'
+            },
+            {
+                id: 2,
+                name: 'فاطمة علي',
+                surah: 'سورة آل عمران',
+                date: '2024-09-04',
+                notes: 'ممتازة في الحفظ والتلاوة'
+            }
+        ];
+
+        let editingId = null;
+
+        const surahs = [
+            'سورة الفاتحة', 'سورة البقرة', 'سورة آل عمران', 'سورة النساء', 'سورة المائدة',
+            'سورة الأنعام', 'سورة الأعراف', 'سورة الأنفال', 'سورة التوبة', 'سورة يونس',
+            'سورة هود', 'سورة يوسف', 'سورة الرعد', 'سورة إبراهيم', 'سورة الحجر'
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderStudents();
+            setupSearch();
+            setTodayDate();
+        });
+
+        function setTodayDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('studentDate').value = today;
+        }
+
+        function setupSearch() {
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredStudents = students.filter(student =>
+                    student.name.toLowerCase().includes(searchTerm) ||
+                    student.surah.toLowerCase().includes(searchTerm)
+                );
+                renderStudents(filteredStudents);
+            });
+        }
+
+        function showAddForm() {
+            document.getElementById('addForm').classList.remove('hidden');
+            clearForm();
+        }
+
+        function hideAddForm() {
+            document.getElementById('addForm').classList.add('hidden');
+        }
+
+        function clearForm() {
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentSurah').value = '';
+            document.getElementById('studentNotes').value = '';
+            setTodayDate();
+        }
+
+        function addStudent() {
+            const name = document.getElementById('studentName').value.trim();
+            const surah = document.getElementById('studentSurah').value;
+            const date = document.getElementById('studentDate').value;
+            const notes = document.getElementById('studentNotes').value.trim();
+
+            if (!name || !surah || !date) {
+                alert('يرجى ملء جميع الحقول المطلوبة');
+                return;
+            }
+
+            const newStudent = {
+                id: Date.now(),
+                name,
+                surah,
+                date,
+                notes
+            };
+
+            students.push(newStudent);
+            renderStudents();
+            hideAddForm();
+        }
+
+        function deleteStudent(id) {
+            if (confirm('هل أنت متأكد من حذف هذا الطالب؟')) {
+                students = students.filter(student => student.id !== id);
+                renderStudents();
+            }
+        }
+
+        function startEdit(id) {
+            editingId = id;
+            renderStudents();
+        }
+
+        function cancelEdit() {
+            editingId = null;
+            renderStudents();
+        }
+
+        function saveEdit(id) {
+            const student = students.find(s => s.id === id);
+            if (!student) return;
+
+            const name = document.getElementById(`edit-name-${id}`).value.trim();
+            const surah = document.getElementById(`edit-surah-${id}`).value;
+            const date = document.getElementById(`edit-date-${id}`).value;
+            const notes = document.getElementById(`edit-notes-${id}`).value.trim();
+
+            if (!name || !surah || !date) {
+                alert('يرجى ملء جميع الحقول المطلوبة');
+                return;
+            }
+
+            student.name = name;
+            student.surah = surah;
+            student.date = date;
+            student.notes = notes;
+
+            editingId = null;
+            renderStudents();
+        }
+
+        function renderStudents(studentsToRender = students) {
+            const grid = document.getElementById('studentsGrid');
+            const noResults = document.getElementById('noResults');
+
+            if (studentsToRender.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+
+            grid.innerHTML = studentsToRender.map(student => {
+                const isEditing = editingId === student.id;
+                return `
+                    <div class="bg-white rounded-xl card-shadow border border-gray-100 p-6 card-hover transition-all duration-300">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 btn-gradient rounded-full flex items-center justify-center">
+                                    <svg class="icon text-white" viewBox="0 0 24 24">
+                                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    ${isEditing ? `
+                                        <input
+                                            type="text"
+                                            id="edit-name-${student.id}"
+                                            value="${student.name}"
+                                            class="text-xl font-bold text-gray-800 border-b-2 border-emerald-300 focus:outline-none focus:border-emerald-500 bg-transparent"
+                                        />
+                                    ` : `
+                                        <h3 class="text-xl font-bold text-gray-800">${student.name}</h3>
+                                    `}
+                                    <p class="text-sm text-gray-500">طالب القرآن الكريم</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                ${isEditing ? `
+                                    <button
+                                        onclick="saveEdit(${student.id})"
+                                        class="p-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
+                                    >
+                                        <svg class="w-4 h-4" viewBox="0 0 24 24">
+                                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                            <polyline points="17,21 17,13 7,13 7,21"></polyline>
+                                            <polyline points="7,3 7,8 15,8"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button
+                                        onclick="cancelEdit()"
+                                        class="p-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                                    >
+                                        <svg class="w-4 h-4" viewBox="0 0 24 24">
+                                            <path d="m18 6-12 12"></path>
+                                            <path d="m6 6 12 12"></path>
+                                        </svg>
+                                    </button>
+                                ` : `
+                                    <button
+                                        onclick="startEdit(${student.id})"
+                                        class="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                                    >
+                                        <svg class="w-4 h-4" viewBox="0 0 24 24">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                        </svg>
+                                    </button>
+                                    <button
+                                        onclick="deleteStudent(${student.id})"
+                                        class="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                                    >
+                                        <svg class="w-4 h-4" viewBox="0 0 24 24">
+                                            <polyline points="3,6 5,6 21,6"></polyline>
+                                            <path d="m19,6v14a2,2 0 0,1-2,2H7a2,2 0 0,1-2-2V6m3,0V4a2,2 0 0,1,2-2h4a2,2 0 0,1,2,2v2"></path>
+                                        </svg>
+                                    </button>
+                                `}
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3">
+                                <svg class="icon-sm text-emerald-500" viewBox="0 0 24 24">
+                                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                                </svg>
+                                <div class="flex-1">
+                                    <label class="text-sm font-semibold text-gray-600 block mb-1">السورة</label>
+                                    ${isEditing ? `
+                                        <select
+                                            id="edit-surah-${student.id}"
+                                            class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500"
+                                        >
+                                            ${surahs.map(surah => `
+                                                <option value="${surah}" ${surah === student.surah ? 'selected' : ''}>${surah}</option>
+                                            `).join('')}
+                                        </select>
+                                    ` : `
+                                        <p class="text-gray-800 font-medium bg-emerald-50 p-2 rounded-lg">${student.surah}</p>
+                                    `}
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3">
+                                <svg class="icon-sm text-blue-500" viewBox="0 0 24 24">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                <div class="flex-1">
+                                    <label class="text-sm font-semibold text-gray-600 block mb-1">التاريخ</label>
+                                    ${isEditing ? `
+                                        <input
+                                            type="date"
+                                            id="edit-date-${student.id}"
+                                            value="${student.date}"
+                                            class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500"
+                                        />
+                                    ` : `
+                                        <p class="text-gray-800 font-medium bg-blue-50 p-2 rounded-lg">${student.date}</p>
+                                    `}
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3">
+                                <svg class="icon-sm text-amber-500 mt-1" viewBox="0 0 24 24">
+                                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                                    <polyline points="14,2 14,8 20,8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10,9 9,9 8,9"></polyline>
+                                </svg>
+                                <div class="flex-1">
+                                    <label class="text-sm font-semibold text-gray-600 block mb-1">ملاحظة</label>
+                                    ${isEditing ? `
+                                        <textarea
+                                            id="edit-notes-${student.id}"
+                                            class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500 h-20 resize-none"
+                                            placeholder="أدخل ملاحظاتك هنا..."
+                                        >${student.notes}</textarea>
+                                    ` : `
+                                        <p class="text-gray-800 bg-amber-50 p-2 rounded-lg">${student.notes || 'لا توجد ملاحظات'}</p>
+                                    `}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
+</html>
